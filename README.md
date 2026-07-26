@@ -40,19 +40,23 @@ export const links = {
 
 ### 2. 講師・メンターの写真
 
-`public/images/instructors/` と `public/images/mentors/` に置きます。
-ファイル名の一覧は `public/images/README.md` を参照してください。
+元写真を `assets/people/instructors/` `assets/people/mentors/` に置き、`npm run images` を実行します。
+公開用の正方形800px webp が `public/images/` に生成され、円形アバターで表示されます。
+ファイル名の一覧と調整方法は `public/images/README.md` を参照してください。
 写真がない人は自動でイニシャル入りの円が表示されます。
 
-### 3. ヒーロー画像
+### 3. イメージ画像（ヒーロー・アイキャッチ・OGP）
 
-`public/images/hero.jpg` を置くと、トップページ右側に表示されます。
+`assets/site/` の3枚を差し替えて `npm run images` を実行します。
 
-### 4. OGP画像
+| 元画像 | 使われている場所 |
+| --- | --- |
+| `assets/site/hero.png` | トップページ ヒーロー右カラム |
+| `assets/site/online-lesson.png` | トップページ「全6回の流れ」 |
+| `assets/site/eyecatch.png` | プログラム詳細ページ上部のバナー＋SNSシェア画像（OGP） |
+| `assets/site/icon.png` | ファビコン（タブのアイコン・iOSホーム画面アイコン） |
 
-`public/images/og/ogp.png`（1200×630px）を置くとSNSシェア時のサムネイルになります。
-
-### 5. 公開URL
+### 4. 公開URL
 
 `src/data/site.ts` の `url` を実際のドメインに変更してください（OGPの絶対URL生成に使用）。
 

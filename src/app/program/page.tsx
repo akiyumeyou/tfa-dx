@@ -1,36 +1,44 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import Link from "next/link";
 import { CtaButton } from "@/components/CtaButton";
 import { SectionHeading } from "@/components/SectionHeading";
-import { sessions } from "@/data/program";
+import { instructors } from "@/data/people";
+import {
+  aiLiteracy,
+  deliverable,
+  dxDefinition,
+  dxSkills,
+  followUp,
+  sessionParts,
+  sessions,
+} from "@/data/program";
 import { links, overview, site } from "@/data/site";
 
 export const metadata: Metadata = {
   title: "プログラム詳細",
   description:
-    "全6回のカリキュラム詳細。第1部の講座（隔週水曜19:00〜21:00・オンライン）と第2部のAI学習・交流（21:00〜21:30）の2部制で進みます。",
+    "全6回のカリキュラム詳細。第1部の講座（隔週水曜19:00〜21:00・オンライン）と第2部のAI学習・交流（21:00〜21:30）の2部制で進みます。およそ3ヶ月後・2月末のアンケート回答をもって全日程終了です。",
 };
 
-const PARTS = [
-  {
-    number: "1",
-    title: "講座",
-    detail: "隔週水曜 19:00〜21:00・オンライン",
-    description:
-      "各回のテーマを担当講師が解説。ワークを交えながら手を動かして学びます。",
-  },
-  {
-    number: "2",
-    title: "AI学習・交流",
-    detail: "21:00〜21:30",
-    description:
-      "その日の学びを共有し、疑問をその場で解消。受講生同士のつながりも生まれます。",
-  },
-] as const;
+/** 肩書は people.ts を正とし、講師データの重複を持たない */
+const instructorById = new Map(
+  instructors.map((instructor) => [instructor.id, instructor]),
+);
 
 export default function ProgramPage() {
   return (
     <>
+      <Image
+        src="/images/eyecatch.webp"
+        alt="AIを活用して学ぶ受講者のイメージ"
+        width={1600}
+        height={554}
+        priority
+        sizes="100vw"
+        className="h-36 w-full object-cover md:h-56 lg:h-72"
+      />
+
       <section className="bg-gradient-to-b from-primary-light/50 to-canvas">
         <div className="mx-auto max-w-[1200px] px-4 py-12 md:px-8 md:py-16">
           <p className="text-xs font-bold tracking-[0.2em] text-primary md:text-sm">
@@ -41,7 +49,7 @@ export default function ProgramPage() {
           </h1>
           <p className="mt-5 max-w-2xl leading-relaxed text-ink-muted">
             AIを味方にする方法を学ぶ全6回。マインドセットから実践、そして発表まで、
-            3ヶ月で「自分で進める力」が身につくよう設計されています。
+            およそ3ヶ月で「自分で進める力」が身につくよう設計されています。
           </p>
           <div className="mt-8">
             <CtaButton href={links.apply} size="lg">
@@ -51,52 +59,112 @@ export default function ProgramPage() {
         </div>
       </section>
 
-      {/* 2部制の説明 */}
+      {/* なぜこの流れなのか */}
       <section className="mx-auto max-w-[1200px] px-4 py-16 md:px-8 md:py-20">
         <SectionHeading
-          eyebrow="STRUCTURE"
-          title="各回は2部制で進みます"
+          eyebrow="WHY"
+          title="なぜこの流れなのか"
+          description="DX人材に必要な3つの力と、その土台となるAIリテラシーを積み上げる構成です。"
           align="left"
         />
-        <ul className="mt-10 grid gap-6 md:grid-cols-2">
-          {PARTS.map((part) => (
+
+        <p className="mt-10 rounded-card bg-primary-dark px-6 py-5 text-center text-lg font-bold leading-relaxed text-white md:text-xl">
+          {dxDefinition}
+        </p>
+
+        <ul className="mt-6 grid gap-6 md:grid-cols-3">
+          {dxSkills.map((skill) => (
             <li
-              key={part.number}
-              className="rounded-card border border-primary-pale bg-white p-7 shadow-sm"
+              key={skill.title}
+              className="rounded-card border-t-4 border-primary bg-white p-6 shadow-sm"
             >
-              <div className="flex items-center gap-3">
-                <span className="grid h-9 w-9 place-items-center rounded-full bg-primary font-bold text-white">
-                  {part.number}
-                </span>
-                <h3 className="text-xl font-bold text-ink">
-                  第{part.number}部　{part.title}
-                </h3>
-              </div>
-              <p className="mt-3 font-semibold text-primary-dark">
-                {part.detail}
-              </p>
-              <p className="mt-2 leading-relaxed text-ink-muted">
-                {part.description}
-              </p>
+              <h3 className="text-lg font-bold text-primary-dark md:text-xl">
+                {skill.title}
+              </h3>
+              <ul className="mt-4 space-y-3">
+                {skill.points.map((point) => (
+                  <li
+                    key={point}
+                    className="flex gap-2 leading-relaxed text-ink-muted"
+                  >
+                    <span aria-hidden="true" className="text-primary">
+                      ・
+                    </span>
+                    <span>{point}</span>
+                  </li>
+                ))}
+              </ul>
             </li>
           ))}
         </ul>
+
+        <div className="mt-6 rounded-card bg-accent/25 px-6 py-5 text-center">
+          <h3 className="text-lg font-bold text-ink md:text-xl">
+            {aiLiteracy.title}
+          </h3>
+          <p className="mt-2 leading-relaxed text-ink-muted">
+            {aiLiteracy.description}
+          </p>
+        </div>
       </section>
 
-      {/* 各回の詳細 */}
+      {/* 2部制の説明 */}
       <section className="bg-white py-16 md:py-20">
         <div className="mx-auto max-w-[1200px] px-4 md:px-8">
           <SectionHeading
-            eyebrow="CURRICULUM"
-            title="全6回のカリキュラム"
+            eyebrow="STRUCTURE"
+            title="各回は2部制で進みます"
             align="left"
           />
+          <ul className="mt-10 grid gap-6 md:grid-cols-2">
+            {sessionParts.map((part) => (
+              <li
+                key={part.number}
+                className="rounded-card border border-primary-pale bg-canvas p-7"
+              >
+                <div className="flex items-center gap-3">
+                  <span className="grid h-9 w-9 place-items-center rounded-full bg-primary font-bold text-white">
+                    {part.number}
+                  </span>
+                  <h3 className="text-xl font-bold text-ink">
+                    第{part.number}部　{part.title}
+                  </h3>
+                </div>
+                <p className="mt-3 font-semibold text-primary-dark">
+                  {part.detail}
+                </p>
+                <p className="mt-2 leading-relaxed text-ink-muted">
+                  {part.description}
+                </p>
+              </li>
+            ))}
+          </ul>
 
-          <ol className="mt-12 space-y-6">
-            {sessions.map((session) => (
+          <p className="mt-6 rounded-card border border-dashed border-primary-light px-6 py-4 text-sm leading-relaxed text-ink-muted">
+            講座後の課題として、初心者向けの学習AI動画（仮）をお渡しします。
+            ※学習するAIツールは変更する可能性があります。
+          </p>
+        </div>
+      </section>
+
+      {/* 各回の詳細 */}
+      <section className="mx-auto max-w-[1200px] px-4 py-16 md:px-8 md:py-20">
+        <SectionHeading
+          eyebrow="CURRICULUM"
+          title="全6回のカリキュラム"
+          align="left"
+        />
+
+        <ol className="mt-12 space-y-6">
+          {sessions.map((session) => {
+            const instructor = session.instructorId
+              ? instructorById.get(session.instructorId)
+              : undefined;
+
+            return (
               <li
                 key={session.isoDate}
-                className={`rounded-card border bg-canvas p-6 md:p-8 ${
+                className={`rounded-card border bg-white p-6 shadow-sm md:p-8 ${
                   session.optional
                     ? "border-dashed border-primary-light"
                     : "border-primary-pale"
@@ -127,11 +195,11 @@ export default function ProgramPage() {
                       >
                         {session.venue}
                       </span>
-                      <span className="rounded-card bg-white px-3 py-1 text-xs font-bold text-ink-muted">
+                      <span className="rounded-card bg-canvas px-3 py-1 text-xs font-bold text-ink-muted">
                         {session.time}
                       </span>
                       {session.optional && (
-                        <span className="rounded-card bg-white px-3 py-1 text-xs font-bold text-ink-muted">
+                        <span className="rounded-card bg-canvas px-3 py-1 text-xs font-bold text-ink-muted">
                           任意参加
                         </span>
                       )}
@@ -149,14 +217,16 @@ export default function ProgramPage() {
                         >
                           {session.instructorName}
                         </Link>
-                        <span className="ml-2 text-sm">
-                          {session.instructorTitle}
-                        </span>
+                        {instructor && (
+                          <span className="ml-2 text-sm">
+                            {instructor.titles[0]}
+                          </span>
+                        )}
                       </p>
                     )}
 
                     {session.goal && (
-                      <p className="mt-4 rounded-card border-l-4 border-accent bg-white px-4 py-3 text-sm font-semibold text-ink">
+                      <p className="mt-4 rounded-card border-l-4 border-accent bg-canvas px-4 py-3 text-sm font-semibold text-ink">
                         目標：{session.goal}
                       </p>
                     )}
@@ -167,6 +237,21 @@ export default function ProgramPage() {
                       </p>
                     )}
 
+                    {(session.assignment || session.video) && (
+                      <div className="mt-5 flex flex-wrap gap-3 rounded-card bg-primary-pale/60 px-4 py-3">
+                        {session.assignment && (
+                          <p className="text-sm font-bold text-primary-dark">
+                            課題：{session.assignment}
+                          </p>
+                        )}
+                        {session.video && (
+                          <p className="text-sm font-bold text-primary-dark">
+                            学習動画：{session.video}
+                          </p>
+                        )}
+                      </div>
+                    )}
+
                     {session.venue === "リアル開催" && (
                       <p className="mt-4 text-sm font-semibold text-primary-dark">
                         会場：ときわプラザ（アスティ2F）第5会議室
@@ -175,14 +260,54 @@ export default function ProgramPage() {
                   </div>
                 </div>
               </li>
-            ))}
-          </ol>
+            );
+          })}
+        </ol>
+      </section>
+
+      {/* 成果物とアンケート */}
+      <section className="bg-white py-16 md:py-20">
+        <div className="mx-auto max-w-[1200px] px-4 md:px-8">
+          <SectionHeading
+            eyebrow="OUTPUT"
+            title="つくるもの、そして修了まで"
+            align="left"
+          />
+
+          <div className="mt-10 rounded-card bg-primary-pale p-6 md:p-8">
+            <p className="text-sm font-bold text-primary">成果物（受講者全員）</p>
+            <p className="mt-3 text-2xl font-bold text-ink md:text-3xl">
+              {deliverable.theme}
+            </p>
+            <p className="mt-2 font-semibold text-primary-dark">
+              {deliverable.note}
+            </p>
+            <p className="mt-4 leading-relaxed text-ink-muted">
+              {deliverable.description}
+            </p>
+          </div>
+
+          <div className="mt-6 rounded-card border-2 border-accent bg-canvas p-6 md:p-8">
+            <p className="text-sm font-bold text-accent-strong">
+              全6回のあと
+            </p>
+            <p className="mt-3 text-xl font-bold text-ink md:text-2xl">
+              {followUp.title}
+            </p>
+            <p className="mt-3 leading-relaxed text-ink-muted">
+              {followUp.description}
+            </p>
+          </div>
         </div>
       </section>
 
       {/* 受講について */}
       <section className="mx-auto max-w-[1200px] px-4 py-16 md:px-8 md:py-20">
-        <SectionHeading eyebrow="ADMISSION" title="お申込み・受講について" align="left" />
+        <SectionHeading
+          eyebrow="ADMISSION"
+          title="お申込み・受講について"
+          align="left"
+        />
 
         <dl className="mt-10 max-w-3xl divide-y divide-primary-pale rounded-card border border-primary-pale bg-white">
           {[
@@ -190,6 +315,7 @@ export default function ProgramPage() {
             { term: "定員", detail: overview.capacity },
             { term: "対象", detail: overview.target },
             { term: "修了証", detail: overview.certificate },
+            { term: "全日程の終了", detail: overview.completion },
             { term: "事前説明会", detail: overview.briefing },
             { term: "お問い合わせ", detail: site.contactEmail },
           ].map((row) => (

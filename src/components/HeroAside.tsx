@@ -14,10 +14,11 @@ export function HeroAside() {
       {heroPhoto && (
         <Image
           src={heroPhoto}
-          alt="受講している女性の様子"
-          width={800}
-          height={1000}
+          alt="ノートを取りながらAIを使って学ぶ受講者のイメージ"
+          width={1200}
+          height={764}
           priority
+          sizes="(min-width: 1024px) 33vw, 100vw"
           className="w-full rounded-card object-cover shadow-sm"
         />
       )}

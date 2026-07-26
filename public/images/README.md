@@ -1,34 +1,77 @@
 # 画像ファイルの置き場所
 
-写真を追加すると自動的にプレースホルダー（イニシャル円）から差し替わります。
-ファイル名は `src/data/people.ts` の `photo` に書かれているパスと一致させてください。
+**このフォルダの画像はすべて `assets/` からの自動生成物です。直接編集・追加しないでください。**
+元画像を差し替えたら `npm run images`（`scripts/build-images.mjs`）を実行します。
 
-## 講師（`instructors/`）
+## イメージ画像
 
-| ファイル名 | 対象 |
+| 生成物 | 元画像 | 使われている場所 |
+| --- | --- | --- |
+| `hero.webp`（1200×764） | `assets/site/hero.png` | トップページ ヒーロー右カラム |
+| `online-lesson.webp`（1200×759） | `assets/site/online-lesson.png` | トップページ「全6回の流れ」 |
+| `eyecatch.webp`（1600×554） | `assets/site/eyecatch.png` | プログラム詳細ページ上部の横長バナー |
+| `og/ogp.jpg`（1200×630） | `assets/site/eyecatch.png` | SNSシェア時のサムネイル（OGP） |
+
+出力サイズや切り出し比率は `scripts/build-images.mjs` の `SITE_IMAGES` で決めています。
+別の画像に差し替えるときは `assets/site/` の同名ファイルを置き換えてください
+（横長バナーは 3:1 前後、ヒーローは 3:2 前後の画像が収まりよく入ります）。
+
+## 講師・メンターの写真（`instructors/` `mentors/`）
+
+元写真は縦横比も解像度もバラバラなので、`assets/people/` に置いた元写真から
+公開用に **正方形 800×800px の webp** を生成して使います。
+
+```
+assets/people/instructors/kunimoto-chisato.jpg   ← 元写真をここに置く（jpg/jpeg/png/webp）
+        ↓  npm run images
+public/images/instructors/kunimoto-chisato.webp  ← 公開用（正方形800px・自動生成）
+```
+
+### 写真を追加・差し替えする手順
+
+1. 元写真を `assets/people/` の下に、下表のファイル名（拡張子は元のままでOK）で置く
+2. `npm run images` を実行する
+3. 顔の切れ方が気になる場合は `scripts/build-images.mjs` の `FOCUS` を調整して再実行する
+   - `x` `y`: 元写真の中で顔の中心がある位置（左上を0、右下を1とした割合）
+   - `zoom`: 大きいほど顔に寄る（`1` = 短辺いっぱい）
+
+写真がない人は自動でイニシャル入りの円が表示されます。
+
+### ファイル名一覧
+
+| ファイル名（拡張子を除く） | 対象 |
 | --- | --- |
-| `kunimoto-chisato.jpg` | 國本 知里 |
-| `kubo-chikara.jpg` | 久保 主税 |
-| `mirai-konno-junko.jpg` | mirai（今野 純子） |
-| `naka-shinji.jpg` | 那珂 慎二 |
-| `fuchigami-junko.jpg` | 淵上 淳子 |
+| `instructors/kunimoto-chisato` | 國本 知里 |
+| `instructors/kubo-chikara` | 久保 主税 |
+| `instructors/mirai-konno-junko` | mirai（今野 純子） |
+| `instructors/naka-shinji` | 那珂 慎二 |
+| `instructors/fuchigami-junko` | 淵上 淳子 |
+| `mentors/kataoka-yutaka` | 片岡 豊 |
+| `mentors/sato-akiko` | 佐藤 晃子 |
+| `mentors/naka-shinji` | 那珂 慎二 |
+| `mentors/nishimura-eri` | 西村 えり |
 
-## メンター（`mentors/`）
+`src/data/people.ts` の `photoBase` と同じパスです。名前を変えるときは両方合わせてください。
 
-| ファイル名 | 対象 |
+### 元写真の推奨仕様
+
+- 短辺 600px 以上（正方形でなくてOK。切り出しはスクリプトが行います）
+- 頭の上に少し余白がある写真だときれいに収まります
+- 形式は jpg / jpeg / png / webp
+
+## ファビコン（`src/app/` に出力）
+
+`assets/site/icon.png`（ロゴマーク・正方形の透過PNG推奨）から3つ生成します。
+Next.js のファイル規約なので、置くだけで `<link rel="icon">` が自動で入ります。
+
+| 生成物 | 用途 |
 | --- | --- |
-| `kataoka-yutaka.jpg` | 片岡 豊 |
-| `sato-akiko.jpg` | 佐藤 晃子 |
-| `naka-shinji.jpg` | 那珂 慎二 |
-| `nishimura-eri.jpg` | 西村 えり |
+| `src/app/favicon.ico`（16/32/48px） | ブラウザのタブ・ブックマーク |
+| `src/app/icon.png`（256px・透過） | 高解像度ディスプレイ、検索結果 |
+| `src/app/apple-icon.png`（180px・白背景） | iOSのホーム画面（透過は黒く出るため白で塗る） |
 
-## 推奨仕様
+## OGP画像（`og/ogp.jpg`）
 
-- 正方形（1:1）、600×600px 以上
-- 顔が中央に来るようにトリミング（円形に切り抜いて表示されます）
-- 形式は jpg / png / webp
-
-## OGP画像（`og/`）
-
-`ogp.png` を置くと SNS シェア時のサムネイルになります（推奨 1200×630px）。
-未設置の場合はテキストのみのカードが表示されます。
+`assets/site/eyecatch.png` から 1200×630px に切り出して生成しています。
+参照先は `src/app/layout.tsx` の `openGraph.images`。差し替えたら
+X（Twitter）やFacebookのキャッシュが残るため、各社のデバッガーで再取得してください。

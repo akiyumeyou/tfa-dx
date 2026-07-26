@@ -1,10 +1,28 @@
+import Image from "next/image";
 import Link from "next/link";
 import { CtaButton } from "@/components/CtaButton";
 import { FaqAccordion } from "@/components/FaqAccordion";
 import { HeroAside } from "@/components/HeroAside";
+import { PeopleMarquee, type PersonCard } from "@/components/PeopleMarquee";
 import { SectionHeading } from "@/components/SectionHeading";
+import { instructors, mentors, type Person } from "@/data/people";
 import { audienceTypes, features, sessions } from "@/data/program";
 import { links, overview, site } from "@/data/site";
+import { resolvePhoto } from "@/lib/photo";
+
+/** 写真パスの解決は fs を使うのでサーバー側で済ませてから渡す */
+function toPersonCards(people: Person[]): PersonCard[] {
+  return people.map((person) => ({
+    id: person.id,
+    name: person.name,
+    initials: person.initials,
+    titles: person.titles,
+    bio: person.bio,
+    session: person.session,
+    tokushimaBased: person.tokushimaBased,
+    photoSrc: resolvePhoto(person.photoBase),
+  }));
+}
 
 const HERO_HIGHLIGHTS = [
   { label: "参加費", value: "無料" },
@@ -38,7 +56,7 @@ export default function Home() {
           <p className="mt-6 max-w-2xl text-base leading-relaxed text-ink-muted md:text-lg">
             {site.subCopy}
             <br className="hidden md:block" />
-            専任メンターが3ヶ月間、あなたの隣で伴走します。
+            専任メンターがおよそ3ヶ月間、あなたの隣で伴走します。
           </p>
 
           <div className="mt-8">
@@ -104,7 +122,7 @@ export default function Home() {
           <SectionHeading
             eyebrow="FEATURES"
             title="成長を加速させる5つの特徴"
-            description="学ぶだけで終わらせない。3ヶ月で「自分で進める力」が身につく設計です。"
+            description="学ぶだけで終わらせない。およそ3ヶ月で「自分で進める力」が身につく設計です。"
           />
           <ul className="mt-12 grid gap-6 md:grid-cols-2">
             {features.map((feature, index) => (
@@ -142,6 +160,56 @@ export default function Home() {
               </li>
             ))}
           </ul>
+        </div>
+      </section>
+
+      {/* 講師・メンター（横に流れるカード） */}
+      <section className="overflow-hidden py-16 md:py-24">
+        <div className="mx-auto max-w-[1200px] px-4 md:px-8">
+          <SectionHeading
+            eyebrow="INSTRUCTORS & MENTORS"
+            title="この人たちから学べます"
+            description="最前線のDX・AI実践者と、身近に相談できる地元メンターによる伴走支援体制。カードをタップすると詳しいプロフィールが開きます。"
+          />
+        </div>
+
+        <div className="mt-12 space-y-10">
+          <div>
+            <div className="mx-auto mb-4 flex max-w-[1200px] flex-wrap items-center gap-3 px-4 md:px-8">
+              <h3 className="text-lg font-bold text-ink md:text-xl">登壇者</h3>
+              <span className="rounded-full bg-primary px-3 py-1 text-xs font-bold text-white">
+                全{instructors.length}名
+              </span>
+              <span className="text-sm text-ink-muted">
+                各回のテーマを担当します
+              </span>
+            </div>
+            <PeopleMarquee people={toPersonCards(instructors)} />
+          </div>
+
+          <div>
+            <div className="mx-auto mb-4 flex max-w-[1200px] flex-wrap items-center gap-3 px-4 md:px-8">
+              <h3 className="text-lg font-bold text-ink md:text-xl">
+                伴走メンター
+              </h3>
+              <span className="rounded-full bg-primary px-3 py-1 text-xs font-bold text-white">
+                全{mentors.length}名
+              </span>
+              <span className="rounded-full bg-accent/25 px-3 py-1 text-xs font-bold text-ink">
+                全員徳島県在住
+              </span>
+              <span className="text-sm text-ink-muted">
+                およそ3ヶ月、個別に伴走します
+              </span>
+            </div>
+            <PeopleMarquee people={toPersonCards(mentors)} direction="right" />
+          </div>
+        </div>
+
+        <div className="mt-12 text-center">
+          <CtaButton href="/instructors" variant="secondary">
+            講師・メンターを詳しく見る
+          </CtaButton>
         </div>
       </section>
 
@@ -225,14 +293,30 @@ export default function Home() {
           ))}
         </ol>
 
-        <div className="mt-12 flex flex-col items-center gap-3">
-          <p className="text-center text-sm text-ink-muted">
-            01〜05はオンライン（19:00〜21:30）／06のみリアル開催（ときわプラザ
-            13:30〜15:30）
-          </p>
-          <CtaButton href="/program" variant="secondary">
-            プログラム詳細を見る
-          </CtaButton>
+        <div className="mt-12 grid items-center gap-8 rounded-card border border-primary-pale bg-white p-6 shadow-sm md:grid-cols-2 md:p-8">
+          <Image
+            src="/images/online-lesson.webp"
+            alt="自宅のパソコンからオンライン講座を受けている様子"
+            width={1200}
+            height={759}
+            sizes="(min-width: 768px) 45vw, 100vw"
+            className="w-full rounded-card object-cover"
+          />
+          <div>
+            <h3 className="text-xl font-bold text-ink md:text-2xl">
+              自宅から、夜の2時間半。
+            </h3>
+            <p className="mt-4 leading-relaxed text-ink-muted">
+              01〜05はオンライン開催（19:00〜21:30）。パソコンとネット環境があれば、
+              お住まいの場所を問わず参加できます。06のみリアル開催（ときわプラザ
+              13:30〜15:30）です。
+            </p>
+            <div className="mt-6">
+              <CtaButton href="/program" variant="secondary">
+                プログラム詳細を見る
+              </CtaButton>
+            </div>
+          </div>
         </div>
       </section>
 
@@ -301,6 +385,7 @@ export default function Home() {
             },
             { term: "事前説明会", detail: overview.briefing },
             { term: "修了証", detail: overview.certificate },
+            { term: "全日程の終了", detail: overview.completion },
             { term: "主催", detail: site.organizer },
             {
               term: "受託者",
@@ -316,6 +401,10 @@ export default function Home() {
             </div>
           ))}
         </dl>
+
+        <p className="mx-auto mt-8 max-w-3xl text-sm leading-relaxed text-ink-muted">
+          {site.disclaimer}
+        </p>
 
         <div className="mt-12 text-center">
           <CtaButton href={links.apply} size="lg">

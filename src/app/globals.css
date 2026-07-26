@@ -37,6 +37,20 @@ body {
   outline-offset: 2px;
 }
 
+/* 講師カードの横流し。同じ並びを2周ぶん並べ、半分進んだところで先頭に戻すとつながって見える */
+@keyframes marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+.marquee-track {
+  animation: marquee var(--marquee-duration, 40s) linear infinite;
+}
+
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
@@ -44,5 +58,10 @@ body {
     animation-duration: 0.01ms !important;
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
+  }
+
+  /* 動きを止める設定のときは流さない（横スクロールでは閲覧できる） */
+  .marquee-track {
+    animation: none;
   }
 }

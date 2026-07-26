@@ -1,0 +1,48 @@
+@import "tailwindcss";
+
+@theme {
+  --color-primary: #7b68ae;
+  --color-primary-dark: #5b4b87;
+  --color-primary-light: #c4b5e3;
+  --color-primary-pale: #ece7f7;
+  --color-accent: #e8a87c;
+  --color-accent-hover: #dc9760;
+  /* 白背景に置く文字色として 4.5:1 を満たす濃さ */
+  --color-accent-strong: #a35526;
+  --color-ink: #2d2d3f;
+  --color-ink-muted: #55556b;
+  --color-canvas: #f8f6fb;
+
+  --font-sans: var(--font-noto-sans-jp), system-ui, sans-serif;
+
+  --radius-card: 8px;
+}
+
+html {
+  scroll-behavior: smooth;
+  /* 固定ヘッダーにアンカー先が隠れないようにする */
+  scroll-padding-top: 5rem;
+}
+
+body {
+  background-color: var(--color-canvas);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+  font-size: 1rem;
+  line-height: 1.9;
+}
+
+:focus-visible {
+  outline: 3px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

@@ -284,6 +284,11 @@ async function buildAppIcons() {
 const TITLE_WIDTH = 1400;
 /** 金色の判定。赤・緑が高く青が低い画素を金とみなす */
 const isGold = (r, g, b) => r > 150 && g > 110 && b < 130 && r - b > 60;
+/**
+ * 元の見出し画像には赤い波線（校正記号のような装飾）が入っているので消す。
+ * 金色（緑が高い）とは緑の値で区別できる。
+ */
+const isRedLine = (r, g, b) => r > 150 && g < 90 && b < 90 && r - g > 110;
 
 /**
  * トップページの見出し画像。余白を落としたものと、
@@ -297,7 +302,18 @@ async function buildHeroTitle() {
     .toBuffer({ resolveWithObject: true });
   const { width: W, height: H, channels: C } = info;
 
-  // 文字の外周（余白）を落とす
+  // 赤い波線を透明にしてから、文字の外周（余白）を落とす
+  let removedRedPixels = 0;
+  for (let y = 0; y < H; y++) {
+    for (let x = 0; x < W; x++) {
+      const i = (y * W + x) * C;
+      if (data[i + 3] > 0 && isRedLine(data[i], data[i + 1], data[i + 2])) {
+        data[i + 3] = 0;
+        removedRedPixels++;
+      }
+    }
+  }
+
   let left = W, right = 0, top = H, bottom = 0;
   for (let y = 0; y < H; y++) {
     for (let x = 0; x < W; x++) {
@@ -310,14 +326,16 @@ async function buildHeroTitle() {
     }
   }
   const box = { left, top, width: right - left + 1, height: bottom - top + 1 };
+  const cleaned = () =>
+    sharp(data, { raw: { width: W, height: H, channels: C } });
 
   const titlePath = path.join(OUTPUT_ROOT, "hero-title.webp");
-  await sharp(sourcePath)
+  await cleaned()
     .extract(box)
     .resize(TITLE_WIDTH)
     .webp({ quality: 90 })
     .toFile(titlePath);
-  await report("hero-title.png", titlePath);
+  await report(`hero-title.png（赤線 ${removedRedPixels}px 除去）`, titlePath);
 
   // マスク：金色の画素だけ不透明にした白い画像
   const mask = Buffer.alloc(box.width * box.height * 4);

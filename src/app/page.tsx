@@ -1,7 +1,7 @@
 import Image from "next/image";
-import Link from "next/link";
 import { CtaButton } from "@/components/CtaButton";
 import { FaqAccordion } from "@/components/FaqAccordion";
+import { FormQrPanel } from "@/components/FormQrPanel";
 import { HeroAside } from "@/components/HeroAside";
 import { PeopleMarquee, type PersonCard } from "@/components/PeopleMarquee";
 import { SectionHeading } from "@/components/SectionHeading";
@@ -33,6 +33,47 @@ const HERO_HIGHLIGHTS = [
 export default function Home() {
   return (
     <>
+      {/* アイキャッチ（全幅の帯＋見出し） */}
+      <section className="relative">
+        <Image
+          src="/images/hero-band.webp"
+          alt=""
+          width={1600}
+          height={640}
+          priority
+          sizes="100vw"
+          className="h-auto max-h-[560px] min-h-[260px] w-full object-cover object-[62%_35%] md:object-[72%_35%]"
+        />
+
+        {/* 見出しを読みやすくするための薄い白 */}
+        <div
+          aria-hidden="true"
+          className="absolute inset-0 bg-gradient-to-r from-white/80 via-white/25 to-transparent sm:from-white/55 sm:via-white/5"
+        />
+
+        <div className="absolute inset-0 flex items-center">
+          <div className="mx-auto w-full max-w-[1200px] px-4 md:px-8">
+            <h1 className="relative w-[88%] max-w-[620px] sm:w-[76%]">
+              <span className="sr-only">
+                AIを味方につけ、徳島で輝くDX人材へ
+              </span>
+              <Image
+                src="/images/hero-title.webp"
+                alt=""
+                aria-hidden="true"
+                width={1400}
+                height={332}
+                priority
+                sizes="(min-width: 768px) 620px, 92vw"
+                className="w-full"
+              />
+              {/* 「輝く」の金色部分だけを流れる光でキラッとさせる */}
+              <span aria-hidden="true" className="gold-shine absolute inset-0" />
+            </h1>
+          </div>
+        </div>
+      </section>
+
       {/* ヒーロー */}
       <section className="bg-gradient-to-b from-primary-light/60 via-primary-pale/40 to-canvas">
         <div className="mx-auto grid max-w-[1200px] gap-10 px-4 py-14 md:px-8 md:py-24 lg:grid-cols-[1.35fr_1fr] lg:items-center">
@@ -40,20 +81,8 @@ export default function Home() {
           <p className="inline-block rounded-full bg-primary px-4 py-1.5 text-sm font-bold text-white">
             徳島県 女性DX人材育成プログラム
           </p>
-          <h1 className="mt-6 text-3xl font-bold leading-tight text-ink md:text-5xl md:leading-[1.25]">
-            AIを味方につけ、
-            <br />
-            徳島で
-            <span className="relative whitespace-nowrap">
-              <span className="relative z-10">輝くDX人材</span>
-              <span
-                aria-hidden="true"
-                className="absolute inset-x-0 bottom-1 z-0 h-3 bg-accent/50 md:bottom-2 md:h-4"
-              />
-            </span>
-            へ
-          </h1>
-          <p className="mt-6 max-w-2xl text-base leading-relaxed text-ink-muted md:text-lg">
+          {/* 見出しはページ最上部のアイキャッチ側に置いているため、ここでは繰り返さない */}
+          <p className="mt-6 max-w-2xl text-lg leading-relaxed text-ink md:text-xl">
             {site.subCopy}
             <br className="hidden md:block" />
             専任メンターがおよそ3ヶ月間、あなたの隣で伴走します。
@@ -134,29 +163,42 @@ export default function Home() {
                     : "border-primary-pale bg-canvas"
                 }`}
               >
-                <span
-                  className={`inline-block rounded-full px-3 py-1 text-xs font-bold ${
-                    index === 0
-                      ? "bg-white text-primary-dark"
-                      : "bg-primary-pale text-primary-dark"
-                  }`}
-                >
-                  {feature.number}
-                </span>
-                <h3
-                  className={`mt-3 text-xl font-bold md:text-2xl ${
-                    index === 0 ? "text-white" : "text-ink"
-                  }`}
-                >
-                  {feature.title}
-                </h3>
-                <p
-                  className={`mt-2 leading-relaxed ${
-                    index === 0 ? "text-primary-pale" : "text-ink-muted"
-                  }`}
-                >
-                  {feature.description}
-                </p>
+                <div className="flex items-start gap-5">
+                  <Image
+                    src={feature.icon}
+                    alt=""
+                    width={320}
+                    height={320}
+                    sizes="96px"
+                    className="h-20 w-20 shrink-0 rounded-card bg-white object-contain md:h-24 md:w-24"
+                  />
+
+                  <div className="min-w-0">
+                    <span
+                      className={`inline-block rounded-full px-3 py-1 text-xs font-bold ${
+                        index === 0
+                          ? "bg-white text-primary-dark"
+                          : "bg-primary-pale text-primary-dark"
+                      }`}
+                    >
+                      {feature.number}
+                    </span>
+                    <h3
+                      className={`mt-3 text-xl font-bold md:text-2xl ${
+                        index === 0 ? "text-white" : "text-ink"
+                      }`}
+                    >
+                      {feature.title}
+                    </h3>
+                    <p
+                      className={`mt-2 leading-relaxed ${
+                        index === 0 ? "text-primary-pale" : "text-ink-muted"
+                      }`}
+                    >
+                      {feature.description}
+                    </p>
+                  </div>
+                </div>
               </li>
             ))}
           </ul>
@@ -350,12 +392,14 @@ export default function Home() {
               <CtaButton href={links.apply} size="lg">
                 無料で受講申し込み
               </CtaButton>
-              <Link
+              <a
                 href={links.briefing}
+                target="_blank"
+                rel="noopener noreferrer"
                 className="inline-flex min-h-[44px] items-center justify-center rounded-card border-2 border-white px-6 py-3 font-bold text-white hover:bg-white/15"
               >
                 まずは説明会だけでも
-              </Link>
+              </a>
             </div>
             <p className="mt-5 text-sm text-primary-pale">
               事前説明会：{overview.briefing}
@@ -406,7 +450,9 @@ export default function Home() {
           {site.disclaimer}
         </p>
 
-        <div className="mt-12 text-center">
+        <FormQrPanel className="mx-auto mt-12 max-w-3xl" />
+
+        <div className="mt-8 text-center">
           <CtaButton href={links.apply} size="lg">
             無料で受講申し込み
           </CtaButton>

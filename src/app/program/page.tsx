@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { CtaButton } from "@/components/CtaButton";
+import { FormQrPanel } from "@/components/FormQrPanel";
 import { SectionHeading } from "@/components/SectionHeading";
 import { instructors } from "@/data/people";
 import {
@@ -333,7 +334,9 @@ export default function ProgramPage() {
           {site.disclaimer}
         </p>
 
-        <div className="mt-10 flex flex-col gap-3 sm:flex-row">
+        <FormQrPanel className="mt-10 max-w-3xl" />
+
+        <div className="mt-8 flex flex-col gap-3 sm:flex-row">
           <CtaButton href={links.apply} size="lg">
             無料で受講申し込み
           </CtaButton>

@@ -17,12 +17,14 @@ export function Footer() {
             <CtaButton href={links.apply} size="lg">
               無料で受講申し込み
             </CtaButton>
-            <Link
+            <a
               href={links.briefing}
+              target="_blank"
+              rel="noopener noreferrer"
               className="inline-flex min-h-[44px] items-center justify-center rounded-card border-2 border-white px-6 py-3 font-bold text-white hover:bg-white/15"
             >
               まずは説明会（9/2）だけでも
-            </Link>
+            </a>
           </div>
         </div>
 

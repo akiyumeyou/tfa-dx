@@ -106,7 +106,8 @@ function PersonDialog({
         onClick={(event) => event.stopPropagation()}
       >
         <div className="flex flex-col gap-6 sm:flex-row">
-          <div className="w-32 shrink-0 sm:w-40">
+          {/* スマホでは写真を大きく中央に、横並びになる幅からは左に置く */}
+          <div className="mx-auto w-56 shrink-0 sm:mx-0 sm:w-44 md:w-48">
             <CardPhoto person={person} />
           </div>
 
@@ -196,7 +197,7 @@ export function PeopleMarquee({
             return (
               <li
                 key={`${person.id}-${index}`}
-                className={`${CARD_WIDTH_CLASS} shrink-0`}
+                className={`${CARD_WIDTH_CLASS} flex shrink-0`}
                 style={{ marginRight: CARD_GAP }}
                 aria-hidden={isDuplicate || undefined}
               >
@@ -204,13 +205,14 @@ export function PeopleMarquee({
                   type="button"
                   tabIndex={isDuplicate ? -1 : undefined}
                   onClick={() => setSelected(person)}
-                  className="group block w-full rounded-card border border-primary-pale bg-white p-4 text-left shadow-sm transition hover:border-primary-light hover:shadow-md"
+                  className="group flex h-full w-full flex-col rounded-card border border-primary-pale bg-white p-4 text-left shadow-sm transition hover:border-primary-light hover:shadow-md"
                 >
                   <CardPhoto person={person} />
-                  <p className="mt-4 text-lg font-bold text-ink md:text-xl">
+                  {/* 名前と肩書の行数が人によって違うので、高さを固定してカードを揃える */}
+                  <p className="mt-4 line-clamp-1 text-lg font-bold text-ink md:text-xl">
                     {person.name}
                   </p>
-                  <p className="mt-1 line-clamp-2 text-sm leading-snug text-ink-muted">
+                  <p className="mt-1 line-clamp-2 min-h-[2.75rem] text-sm leading-snug text-ink-muted">
                     {person.titles[0]}
                   </p>
                   <p className="mt-3 text-sm font-bold text-primary">

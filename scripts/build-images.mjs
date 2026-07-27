@@ -29,14 +29,40 @@ const OUTPUT_QUALITY = 82;
  * width/height 両方指定でその比率にトリミング、width のみなら元の比率のまま縮小する。
  */
 const SITE_IMAGES = [
-  // トップページ ヒーロー右カラム（学習イメージ）
-  { source: "hero.png", output: "hero.webp", width: 1200 },
   // トップページ 全6回の流れ（オンライン受講の様子）
   { source: "online-lesson.png", output: "online-lesson.webp", width: 1200 },
   // プログラム詳細ページ上部の横長アイキャッチ
   { source: "eyecatch.png", output: "eyecatch.webp", width: 1600 },
+  // トップページ最上部の横長アイキャッチ。顔が上寄りなので上から切り出す
+  {
+    source: "hero-band.png",
+    output: "hero-band.webp",
+    width: 1600,
+    height: 640,
+    focusY: 0.15,
+  },
   // SNSシェア用。クローラの対応状況を考えて webp は使わず、写真なのでjpgにする
-  { source: "eyecatch.png", output: "og/ogp.jpg", width: 1200, height: 630 },
+  {
+    source: "hero-band.png",
+    output: "og/ogp.jpg",
+    width: 1200,
+    height: 630,
+    focusY: 0.15,
+  },
+  // 「5つの特徴」のアイコン（1枚のイラストから切り出し済みのもの）
+  ...[1, 2, 3, 4, 5].map((number) => ({
+    source: `features/feature-${number}.png`,
+    output: `features/feature-${number}.webp`,
+    width: 320,
+  })),
+  // 申し込みフォームのQR。線がぼけると読み取れないので拡大は nearest（にじませない）
+  { source: "qr-apply.png", output: "qr-apply.png", width: 480, sharpEdges: true },
+  {
+    source: "qr-briefing.png",
+    output: "qr-briefing.png",
+    width: 480,
+    sharpEdges: true,
+  },
 ];
 
 /** 切り出し後のフレーム内で顔をどの高さに置くか（少し上寄りが人物写真として自然） */
@@ -129,22 +155,53 @@ async function buildPersonPhoto(sourcePath) {
   await report(`${relativePath} (${width}×${height})`, outputPath, "縦長4:5");
 }
 
-/** イメージ画像：指定サイズに縮小（height指定時はその比率に中央トリミング） */
-async function buildSiteImage({ source, output, width, height }) {
+/**
+ * イメージ画像：指定サイズに縮小する。
+ * height を指定するとその比率に切り出す。focusY（0=上端 / 0.5=中央）で縦の切り出し位置を選べる。
+ */
+async function buildSiteImage({
+  source,
+  output,
+  width,
+  height,
+  focusY = 0.5,
+  sharpEdges,
+}) {
   const sourcePath = path.join(SITE_ROOT, source);
   const outputPath = path.join(OUTPUT_ROOT, output);
-  const isJpeg = /\.jpe?g$/i.test(output);
+  const extension = path.extname(output).toLowerCase();
 
   await fs.mkdir(path.dirname(outputPath), { recursive: true });
-  const pipeline = sharp(sourcePath)
-    .rotate()
-    .resize(width, height ?? null, { fit: "cover" });
+  const image = sharp(sourcePath).rotate();
 
-  await (isJpeg
-    ? pipeline.jpeg({ quality: 85, mozjpeg: true })
-    : pipeline.webp({ quality: OUTPUT_QUALITY })
-  ).toFile(outputPath);
+  // 顔が上寄りの写真は中央基準で切ると頭が切れるため、先に位置を指定して切り出す
+  if (height) {
+    const source = await image.metadata();
+    const cropHeight = Math.min(
+      source.height,
+      Math.round(source.width / (width / height)),
+    );
+    image.extract({
+      left: 0,
+      top: Math.round((source.height - cropHeight) * focusY),
+      width: source.width,
+      height: cropHeight,
+    });
+  }
 
+  const pipeline = image.resize(width, height ?? null, {
+    fit: "cover",
+    kernel: sharpEdges ? "nearest" : "lanczos3",
+  });
+
+  const encoded =
+    extension === ".jpg" || extension === ".jpeg"
+      ? pipeline.jpeg({ quality: 85, mozjpeg: true })
+      : extension === ".png"
+        ? pipeline.png({ compressionLevel: 9, palette: true })
+        : pipeline.webp({ quality: OUTPUT_QUALITY });
+
+  await encoded.toFile(outputPath);
   await report(source, outputPath);
 }
 
@@ -224,11 +281,72 @@ async function buildAppIcons() {
   }
 }
 
+const TITLE_WIDTH = 1400;
+/** 金色の判定。赤・緑が高く青が低い画素を金とみなす */
+const isGold = (r, g, b) => r > 150 && g > 110 && b < 130 && r - b > 60;
+
+/**
+ * トップページの見出し画像。余白を落としたものと、
+ * 金色の文字だけを抜いたマスク（光らせるアニメーション用）の2枚を作る。
+ */
+async function buildHeroTitle() {
+  const sourcePath = path.join(SITE_ROOT, "hero-title.png");
+  const { data, info } = await sharp(sourcePath)
+    .ensureAlpha()
+    .raw()
+    .toBuffer({ resolveWithObject: true });
+  const { width: W, height: H, channels: C } = info;
+
+  // 文字の外周（余白）を落とす
+  let left = W, right = 0, top = H, bottom = 0;
+  for (let y = 0; y < H; y++) {
+    for (let x = 0; x < W; x++) {
+      if (data[(y * W + x) * C + 3] > 40) {
+        if (x < left) left = x;
+        if (x > right) right = x;
+        if (y < top) top = y;
+        if (y > bottom) bottom = y;
+      }
+    }
+  }
+  const box = { left, top, width: right - left + 1, height: bottom - top + 1 };
+
+  const titlePath = path.join(OUTPUT_ROOT, "hero-title.webp");
+  await sharp(sourcePath)
+    .extract(box)
+    .resize(TITLE_WIDTH)
+    .webp({ quality: 90 })
+    .toFile(titlePath);
+  await report("hero-title.png", titlePath);
+
+  // マスク：金色の画素だけ不透明にした白い画像
+  const mask = Buffer.alloc(box.width * box.height * 4);
+  for (let y = 0; y < box.height; y++) {
+    for (let x = 0; x < box.width; x++) {
+      const src = ((y + box.top) * W + (x + box.left)) * C;
+      const dst = (y * box.width + x) * 4;
+      const alpha = data[src + 3];
+      const gold = alpha > 40 && isGold(data[src], data[src + 1], data[src + 2]);
+      mask[dst] = mask[dst + 1] = mask[dst + 2] = 255;
+      mask[dst + 3] = gold ? alpha : 0;
+    }
+  }
+  const maskPath = path.join(OUTPUT_ROOT, "hero-title-gold.png");
+  await sharp(mask, {
+    raw: { width: box.width, height: box.height, channels: 4 },
+  })
+    .resize(TITLE_WIDTH)
+    .png({ compressionLevel: 9 })
+    .toFile(maskPath);
+  await report("hero-title.png（金色のみ）", maskPath);
+}
+
 const personPhotos = await findSourceImages(PEOPLE_ROOT);
 await Promise.all([
   ...personPhotos.map(buildPersonPhoto),
   ...SITE_IMAGES.map(buildSiteImage),
   buildAppIcons(),
+  buildHeroTitle(),
 ]);
 console.log(
   `\n人物写真 ${personPhotos.length}枚 / イメージ画像 ${SITE_IMAGES.length}枚 / ファビコン一式を生成しました。`,

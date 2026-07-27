@@ -37,6 +37,34 @@ body {
   outline-offset: 2px;
 }
 
+/* 見出しの金色部分だけを光らせる。金文字の形に切り抜いたマスクの上を光の帯が流れる */
+@keyframes gold-shine {
+  0% {
+    background-position: 200% 0;
+  }
+  60%,
+  100% {
+    background-position: -60% 0;
+  }
+}
+
+.gold-shine {
+  background-image: linear-gradient(
+    105deg,
+    transparent 44%,
+    rgba(255, 255, 255, 0.95) 50%,
+    transparent 56%
+  );
+  background-size: 300% 100%;
+  background-repeat: no-repeat;
+  -webkit-mask-image: url("/images/hero-title-gold.png");
+  mask-image: url("/images/hero-title-gold.png");
+  -webkit-mask-size: 100% 100%;
+  mask-size: 100% 100%;
+  animation: gold-shine 4.5s ease-in-out infinite;
+  pointer-events: none;
+}
+
 /* 講師カードの横流し。同じ並びを2周ぶん並べ、半分進んだところで先頭に戻すとつながって見える */
 @keyframes marquee {
   from {
@@ -63,5 +91,10 @@ body {
   /* 動きを止める設定のときは流さない（横スクロールでは閲覧できる） */
   .marquee-track {
     animation: none;
+  }
+
+  .gold-shine {
+    animation: none;
+    opacity: 0;
   }
 }

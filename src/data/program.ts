@@ -203,30 +203,35 @@ export const followUp = {
 export const features = [
   {
     number: "特徴①",
+    icon: "/images/features/feature-1.webp",
     title: "専任メンターがおよそ3ヶ月間伴走します",
     description:
       "グループメンタリングと個人メンタリングで、最後まで完走できるよう支えます。",
   },
   {
     number: "特徴②",
+    icon: "/images/features/feature-2.webp",
     title: "メンター・登壇者が全てAIおよびIT活用のプロ",
     description:
       "第一線で活躍する講師陣が、実践で使える知識を直接届けます。",
   },
   {
     number: "特徴③",
+    icon: "/images/features/feature-3.webp",
     title: "簡単課題とAI学習動画でAIスキルの実力がつく",
     description:
       "無理のない課題と動画教材で、受講後も自分で学び続けられる力が身につきます。",
   },
   {
     number: "特徴④",
+    icon: "/images/features/feature-4.webp",
     title: "フルタイム勤務でも参加しやすいオンライン夜開催",
     description:
       "隔週水曜の19:00スタート。仕事や家庭と両立しながら学べます。",
   },
   {
     number: "特徴⑤",
+    icon: "/images/features/feature-5.webp",
     title: "成長を加速させるために設計されたカリキュラム",
     description:
       "マインドセットから実践、そして発表まで。およそ3ヶ月で確実に前に進む構成です。",

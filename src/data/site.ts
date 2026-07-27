@@ -19,8 +19,10 @@ export const site = {
 
 /** 申込導線。実フォームが決まり次第ここだけ差し替える。 */
 export const links = {
-  apply: "#apply",
-  briefing: "#briefing",
+  /** 受講申し込みフォーム（public/images/qr-apply.png のQRコードと同じ宛先） */
+  apply: "https://forms.gle/KCYjoJ3qJp5PhQAz7",
+  /** 事前説明会の申し込みフォーム（public/images/qr-briefing.png と同じ宛先） */
+  briefing: "https://forms.gle/2GmfChivWCuqN7758",
 } as const;
 
 export const overview = {

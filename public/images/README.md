@@ -7,14 +7,27 @@
 
 | 生成物 | 元画像 | 使われている場所 |
 | --- | --- | --- |
-| `hero.webp`（1200×764） | `assets/site/hero.png` | トップページ ヒーロー右カラム |
-| `online-lesson.webp`（1200×759） | `assets/site/online-lesson.png` | トップページ「全6回の流れ」 |
+| `hero-band.webp`（1600×640） | `assets/site/hero-band.png` | **トップページ最上部の横長アイキャッチ** |
+| `hero-title.webp`（1400×332） | `assets/site/hero-title.png` | アイキャッチに重ねる見出し（透過PNG） |
+| `hero-title-gold.png`（1400×332） | 同上（自動抽出） | 金色部分だけのマスク。光るアニメーション用 |
+| `og/ogp.jpg`（1200×630） | `assets/site/hero-band.png` | SNSシェア時のサムネイル（OGP） |
 | `eyecatch.webp`（1600×554） | `assets/site/eyecatch.png` | プログラム詳細ページ上部の横長バナー |
-| `og/ogp.jpg`（1200×630） | `assets/site/eyecatch.png` | SNSシェア時のサムネイル（OGP） |
+| `online-lesson.webp`（1200×759） | `assets/site/online-lesson.png` | トップページ「全6回の流れ」 |
+| `features/feature-1〜5.webp`（320×320） | `assets/site/features/` | トップページ「5つの特徴」のアイコン |
+| `qr-apply.png` / `qr-briefing.png`（480×480） | `assets/site/qr-*.png` | 申し込みフォームのQRコード |
 
 出力サイズや切り出し比率は `scripts/build-images.mjs` の `SITE_IMAGES` で決めています。
-別の画像に差し替えるときは `assets/site/` の同名ファイルを置き換えてください
-（横長バナーは 3:1 前後、ヒーローは 3:2 前後の画像が収まりよく入ります）。
+別の画像に差し替えるときは `assets/site/` の同名ファイルを置き換えてください。
+
+**横長バナーの切り出し位置**：`focusY` で縦の切り出し位置を指定できます（`0` = 上端、`0.5` = 中央）。
+顔が上寄りの写真を中央基準で切ると頭が切れるため、`hero-band.png` は `focusY: 0.15` にしています。
+新しい写真に差し替えて頭や顎が切れる場合は、この値を調整してください。
+
+見出し画像は「金色の画素」を自動判別してマスクを生成しています（`buildHeroTitle`）。
+金色以外の色を光らせたい場合は `scripts/build-images.mjs` の `isGold` を調整してください。
+
+画像を作り直すときのプロンプトは `docs/design/eyecatch-prompt.md` にあります。
+なお `assets/site/hero.png`（ヒーロー右カラム用だった学習イメージ）は現在未使用です。
 
 ## 講師・メンターの写真（`instructors/` `mentors/`）
 

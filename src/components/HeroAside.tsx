@@ -1,28 +1,13 @@
-import Image from "next/image";
-import Link from "next/link";
-import { resolvePhoto } from "@/lib/photo";
 import { links, overview } from "@/data/site";
 
 /**
- * ヒーロー右カラム。public/images/hero.* を置くと写真が上に入る。
+ * ヒーロー右カラム。
+ * ページ最上部にアイキャッチ帯を置いたため、ここは説明会の申込カードだけにしている
+ * （同系統の写真が縦に2枚並ぶのを避けるため）。
  */
 export function HeroAside() {
-  const heroPhoto = resolvePhoto("hero");
-
   return (
     <div className="space-y-4">
-      {heroPhoto && (
-        <Image
-          src={heroPhoto}
-          alt="ノートを取りながらAIを使って学ぶ受講者のイメージ"
-          width={1200}
-          height={764}
-          priority
-          sizes="(min-width: 1024px) 33vw, 100vw"
-          className="w-full rounded-card object-cover shadow-sm"
-        />
-      )}
-
       <div className="rounded-card border border-primary-pale bg-white p-6 shadow-sm">
         <p className="inline-block rounded-full bg-primary-pale px-3 py-1 text-xs font-bold text-primary-dark">
           まずは説明会だけでも
@@ -38,12 +23,14 @@ export function HeroAside() {
           <br />
           初心者でも大丈夫です。
         </p>
-        <Link
+        <a
           href={links.briefing}
+          target="_blank"
+          rel="noopener noreferrer"
           className="mt-5 inline-flex min-h-[44px] w-full items-center justify-center rounded-card border-2 border-primary bg-white px-4 py-3 font-bold text-primary-dark hover:bg-primary-pale"
         >
           説明会に申し込む
-        </Link>
+        </a>
       </div>
     </div>
   );

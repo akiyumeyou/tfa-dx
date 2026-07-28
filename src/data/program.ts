@@ -240,16 +240,19 @@ export const features = [
 
 export const audienceTypes = [
   {
+    icon: "/images/audience/audience-1.webp",
     title: "自分の問いを持っている",
     description:
       "「もっとこうだったらいいのに」という思いが、DXの出発点になります。",
   },
   {
+    icon: "/images/audience/audience-2.webp",
     title: "AIを使いこなしたい",
     description:
       "触ったことがなくても大丈夫。基礎から実践まで順を追って学べます。",
   },
   {
+    icon: "/images/audience/audience-3.webp",
     title: "強くなりたい",
     description:
       "自分の力で選択肢を広げたい。その気持ちが一番の参加資格です。",

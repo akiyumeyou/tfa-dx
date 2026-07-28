@@ -7,7 +7,7 @@ import { PeopleMarquee, type PersonCard } from "@/components/PeopleMarquee";
 import { SectionHeading } from "@/components/SectionHeading";
 import { instructors, mentors, type Person } from "@/data/people";
 import { audienceTypes, features, sessions } from "@/data/program";
-import { links, overview, site } from "@/data/site";
+import { challenge, links, overview, site } from "@/data/site";
 import { resolvePhoto } from "@/lib/photo";
 
 /** 写真パスの解決は fs を使うのでサーバー側で済ませてから渡す */
@@ -130,7 +130,15 @@ export default function Home() {
               key={type.title}
               className="rounded-card border border-primary-pale bg-white p-7 shadow-sm"
             >
-              <span className="text-sm font-bold text-primary">
+              <Image
+                src={type.icon}
+                alt=""
+                width={320}
+                height={306}
+                sizes="96px"
+                className="h-20 w-20 object-contain md:h-24 md:w-24"
+              />
+              <span className="mt-4 block text-sm font-bold text-primary">
                 0{index + 1}
               </span>
               <h3 className="mt-2 text-xl font-bold text-ink">{type.title}</h3>
@@ -260,7 +268,7 @@ export default function Home() {
         <SectionHeading
           eyebrow="PROGRAM"
           title="全6回の流れ"
-          description="9月スタート／隔週水曜 19:00〜21:30。第6回のみリアル開催です。"
+          description="9月スタート／隔週水曜 19:00〜21:30オンライン。第6回のみリアル開催です。"
         />
 
         {/* モバイル：縦のタイムライン */}
@@ -417,7 +425,26 @@ export default function Home() {
       >
         <SectionHeading eyebrow="OVERVIEW" title="開催概要" />
 
-        <dl className="mx-auto mt-12 max-w-3xl divide-y divide-primary-pale rounded-card border border-primary-pale bg-white">
+        <div className="mx-auto mt-12 grid max-w-3xl items-center gap-8 rounded-card border border-primary-pale bg-white p-6 shadow-sm md:grid-cols-2 md:p-8">
+          <Image
+            src="/images/hero.webp"
+            alt="AIを活用しながら学ぶ受講者のイメージ"
+            width={1200}
+            height={764}
+            sizes="(min-width: 768px) 45vw, 100vw"
+            className="w-full rounded-card object-cover"
+          />
+          <div>
+            <p className="text-sm font-bold text-accent-strong">
+              {challenge.title}
+            </p>
+            <p className="mt-3 leading-relaxed text-ink-muted">
+              {challenge.body}
+            </p>
+          </div>
+        </div>
+
+        <dl className="mx-auto mt-8 max-w-3xl divide-y divide-primary-pale rounded-card border border-primary-pale bg-white">
           {[
             { term: "参加費", detail: overview.fee },
             { term: "定員", detail: overview.capacity },

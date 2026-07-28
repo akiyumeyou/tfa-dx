@@ -25,6 +25,11 @@ export const links = {
   briefing: "https://forms.gle/2GmfChivWCuqN7758",
 } as const;
 
+export const challenge = {
+  title: "本事業が応える徳島県の課題",
+  body: "女性社長比率12.3%で4年連続全国1位という「挑戦する土壌」を持つ徳島。そこに生成AIという新しい武器を加え、課題を見つけ、データを活かして考え、小さく実践できる女性DX人材を育てます。挑戦する力と、AIがもたらす変革する力を掛け合わせ、企業や地域、そして意思決定の場で活躍する次世代のリーダーを生み出す。それが徳島県がこの事業に込めた狙いです。",
+} as const;
+
 export const overview = {
   fee: "無料",
   capacity: "20名（申込多数の場合は抽選）",

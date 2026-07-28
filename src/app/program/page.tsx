@@ -30,15 +30,17 @@ const instructorById = new Map(
 export default function ProgramPage() {
   return (
     <>
-      <Image
-        src="/images/eyecatch.webp"
-        alt="AIを活用して学ぶ受講者のイメージ"
-        width={1600}
-        height={554}
-        priority
-        sizes="100vw"
-        className="h-36 w-full object-cover md:h-56 lg:h-72"
-      />
+      <div className="flex justify-center bg-canvas">
+        <Image
+          src="/images/eyecatch.webp"
+          alt="AIを活用して学ぶ受講者のイメージ"
+          width={1600}
+          height={554}
+          priority
+          sizes="(min-width: 1600px) 1600px, 100vw"
+          className="h-36 w-full max-w-[1600px] object-cover md:h-56 lg:h-72"
+        />
+      </div>
 
       <section className="bg-gradient-to-b from-primary-light/50 to-canvas">
         <div className="mx-auto max-w-[1200px] px-4 py-12 md:px-8 md:py-16">
@@ -175,7 +177,7 @@ export default function ProgramPage() {
                   {/* 日付ブロック */}
                   <div className="flex shrink-0 items-center gap-4 md:w-40 md:flex-col md:items-start md:gap-2">
                     <span className="text-sm font-bold text-primary">
-                      {session.no ? `第${Number(session.no)}回` : "中間交流会"}
+                      {session.no ? `第${Number(session.no)}回` : "中間交流会（任意参加）"}
                     </span>
                     <span className="text-2xl font-bold text-ink md:text-3xl">
                       {session.date}

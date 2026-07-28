@@ -33,6 +33,8 @@ const SITE_IMAGES = [
   { source: "online-lesson.png", output: "online-lesson.webp", width: 1200 },
   // プログラム詳細ページ上部の横長アイキャッチ
   { source: "eyecatch.png", output: "eyecatch.webp", width: 1600 },
+  // トップページ「開催概要」のアイキャッチ（3:2、752×479）
+  { source: "hero.png", output: "hero.webp", width: 1200 },
   // トップページ最上部の横長アイキャッチ。顔が上寄りなので上から切り出す
   {
     source: "hero-band.png",
@@ -359,12 +361,43 @@ async function buildHeroTitle() {
   await report("hero-title.png（金色のみ）", maskPath);
 }
 
+/**
+ * 「こんな方にピッタリです」のアイコン。1枚の横長画像に3つのアイコンが
+ * 等間隔に並んでいる（下部に01/02/03の数字入りだが、カード側で数字を出すため使わない）。
+ */
+async function buildAudienceIcons() {
+  const sourcePath = path.join(SITE_ROOT, "audience-icons.png");
+  const { width, height } = await sharp(sourcePath).metadata();
+  const columnWidth = Math.floor(width / 3);
+  const iconHeight = Math.round(height * 0.85); // 下部の数字ラベルを除いた高さ
+
+  await fs.mkdir(path.join(OUTPUT_ROOT, "audience"), { recursive: true });
+  await Promise.all(
+    [0, 1, 2].map(async (index) => {
+      const left = index * columnWidth;
+      const cropWidth = index === 2 ? width - left : columnWidth;
+      const outputPath = path.join(
+        OUTPUT_ROOT,
+        "audience",
+        `audience-${index + 1}.webp`,
+      );
+      await sharp(sourcePath)
+        .extract({ left, top: 0, width: cropWidth, height: iconHeight })
+        .resize(320)
+        .webp({ quality: OUTPUT_QUALITY })
+        .toFile(outputPath);
+      await report(`audience-icons.png (${index + 1}/3)`, outputPath);
+    }),
+  );
+}
+
 const personPhotos = await findSourceImages(PEOPLE_ROOT);
 await Promise.all([
   ...personPhotos.map(buildPersonPhoto),
   ...SITE_IMAGES.map(buildSiteImage),
   buildAppIcons(),
   buildHeroTitle(),
+  buildAudienceIcons(),
 ]);
 console.log(
   `\n人物写真 ${personPhotos.length}枚 / イメージ画像 ${SITE_IMAGES.length}枚 / ファビコン一式を生成しました。`,

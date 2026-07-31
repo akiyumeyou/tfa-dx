@@ -1,5 +1,13 @@
-import Image from "next/image";
-import { links, overview } from "@/data/site";
+import { briefingVideoId, links, overview } from "@/data/site";
+
+/**
+ * controls=0 と autoplay+mute を組み合わせて、YouTube 標準の大きな赤い再生ボタンを出さずに
+ * 動くサムネイルとして見せる（音声つきで見たい人は下のリンクからYouTubeへ）。
+ * loop=1&playlist= は限定公開動画だと疑似プレイリストを作れず再生エラーになるため使わない。
+ */
+const briefingVideoSrc =
+  `https://www.youtube.com/embed/${briefingVideoId}` +
+  "?autoplay=1&mute=1&controls=0&modestbranding=1&rel=0&playsinline=1";
 
 /**
  * ヒーロー右カラム。
@@ -10,7 +18,7 @@ export function HeroAside() {
   return (
     <div className="space-y-4">
       <div className="rounded-card border border-primary-pale bg-white p-6 shadow-sm">
-        <div className="flex items-center justify-between gap-4">
+        <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
           <div className="min-w-0">
             <p className="inline-block rounded-full bg-primary-pale px-3 py-1 text-xs font-bold text-primary-dark">
               まずは説明会だけでも
@@ -29,15 +37,26 @@ export function HeroAside() {
               初心者でも大丈夫です。
             </p>
           </div>
-          <Image
-            src="/images/audience/audience-1.webp"
-            alt=""
-            width={320}
-            height={306}
-            sizes="96px"
-            className="h-20 w-20 shrink-0 object-contain md:h-24 md:w-24"
-          />
+          <div className="w-full shrink-0 overflow-hidden rounded-card bg-ink md:w-44">
+            <iframe
+              src={briefingVideoSrc}
+              title="事前説明会の紹介動画"
+              allow="autoplay; encrypted-media; picture-in-picture; web-share"
+              referrerPolicy="strict-origin-when-cross-origin"
+              allowFullScreen
+              loading="lazy"
+              className="aspect-video w-full border-0"
+            />
+          </div>
         </div>
+        <a
+          href={`https://youtu.be/${briefingVideoId}`}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="mt-2 block text-right text-xs text-ink-muted underline hover:text-primary-dark"
+        >
+          音声つきでこの動画を見る
+        </a>
         <a
           href={links.briefing}
           target="_blank"

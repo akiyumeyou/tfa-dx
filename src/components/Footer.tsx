@@ -54,10 +54,6 @@ export function Footer() {
               {site.organizer}
             </p>
             <p className="mt-2">
-              <span className="font-bold">{site.name}：</span>
-              徳島県立男女共同参画総合支援センター
-            </p>
-            <p className="mt-2">
               <span className="font-bold">受託者：</span>
               {site.contractor}
               <br />

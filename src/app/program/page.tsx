@@ -308,13 +308,10 @@ export default function ProgramPage() {
 
       {/* 受講について */}
       <section className="mx-auto max-w-[1200px] px-4 py-16 md:px-8 md:py-20">
-        <SectionHeading
-          eyebrow="ADMISSION"
-          title="お申込み・受講について"
-          align="left"
-        />
+        {/* 締めのセクションなので、トップの「開催概要」と同じく中央寄せで完結させる */}
+        <SectionHeading eyebrow="ADMISSION" title="お申込み・受講について" />
 
-        <dl className="mt-10 max-w-3xl divide-y divide-primary-pale rounded-card border border-primary-pale bg-white">
+        <dl className="mx-auto mt-10 max-w-3xl divide-y divide-primary-pale rounded-card border border-primary-pale bg-white">
           {[
             { term: "参加費", detail: overview.fee },
             { term: "定員", detail: overview.capacity },
@@ -342,18 +339,18 @@ export default function ProgramPage() {
           ))}
         </dl>
 
-        <div className="mt-6 max-w-3xl rounded-card border border-accent bg-accent/15 px-6 py-5">
+        <div className="mx-auto mt-6 max-w-3xl rounded-card border border-accent bg-accent/15 px-6 py-5">
           <p className="text-sm font-bold text-accent-strong">抽選について</p>
           <p className="mt-2 leading-relaxed text-ink">{overview.lotteryNote}</p>
         </div>
 
-        <p className="mt-8 max-w-3xl text-sm leading-relaxed text-ink-muted">
+        <p className="mx-auto mt-8 max-w-3xl text-sm leading-relaxed text-ink-muted">
           {site.disclaimer}
         </p>
 
-        <FormQrPanel className="mt-10 max-w-3xl" />
+        <FormQrPanel className="mx-auto mt-10 max-w-3xl" />
 
-        <div className="mt-8 flex flex-col gap-3 sm:flex-row">
+        <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
           <CtaButton href={links.apply} size="lg">
             無料で受講申し込み
           </CtaButton>
@@ -361,7 +358,9 @@ export default function ProgramPage() {
             講師・メンターを見る
           </CtaButton>
         </div>
-        <ApplyDeadline className="mt-4" />
+        <div className="mt-4 text-center">
+          <ApplyDeadline />
+        </div>
       </section>
     </>
   );

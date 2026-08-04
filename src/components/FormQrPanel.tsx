@@ -26,7 +26,7 @@ const FORMS = [
  */
 export function FormQrPanel({ className = "" }: { className?: string }) {
   return (
-    <div className={`grid gap-4 sm:grid-cols-2 ${className}`}>
+    <div className={`grid gap-6 sm:grid-cols-2 sm:gap-8 ${className}`}>
       {FORMS.map((form) => (
         <a
           key={form.href}
@@ -51,8 +51,9 @@ export function FormQrPanel({ className = "" }: { className?: string }) {
             {form.note && (
               <p className="mt-1 text-sm font-bold text-ink">{form.note}</p>
             )}
-            <p className="mt-2 text-sm font-bold text-primary">
-              スマホで読み取る →
+            {/* カード全体がフォームへのリンク。QRだけだとPCの人が押せると気づかないため明記する */}
+            <p className="mt-2 text-sm font-bold text-primary underline underline-offset-4">
+              スマホで読み取る／クリックで開く →
             </p>
           </div>
         </a>

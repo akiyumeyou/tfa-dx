@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { ApplyDeadline } from "@/components/ApplyDeadline";
 import { CtaButton } from "@/components/CtaButton";
 import { PersonPhoto } from "@/components/PersonPhoto";
 import { SectionHeading } from "@/components/SectionHeading";
@@ -185,6 +186,7 @@ export default function InstructorsPage() {
             プログラム詳細を見る
           </CtaButton>
         </div>
+        <ApplyDeadline className="mt-5" />
       </section>
     </>
   );

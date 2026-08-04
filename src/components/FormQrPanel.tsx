@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { links } from "@/data/site";
+import { links, overview } from "@/data/site";
 
 const QR_SIZE = 480;
 
@@ -8,13 +8,15 @@ const FORMS = [
     href: links.apply,
     image: "/images/qr-apply.png",
     title: "受講申し込み",
-    description: "参加費無料・定員20名（申込多数の場合は抽選）",
+    description: `参加費無料・定員${overview.capacity}`,
+    note: `申込締切：${overview.deadline}`,
   },
   {
     href: links.briefing,
     image: "/images/qr-briefing.png",
     title: "事前説明会の申し込み",
     description: "2026年9月2日(水) 19:00〜 オンライン",
+    note: undefined,
   },
 ] as const;
 
@@ -46,6 +48,9 @@ export function FormQrPanel({ className = "" }: { className?: string }) {
             <p className="mt-1 text-sm leading-relaxed text-ink-muted">
               {form.description}
             </p>
+            {form.note && (
+              <p className="mt-1 text-sm font-bold text-ink">{form.note}</p>
+            )}
             <p className="mt-2 text-sm font-bold text-primary">
               スマホで読み取る →
             </p>

@@ -1,4 +1,5 @@
 import Image from "next/image";
+import { ApplyDeadline } from "@/components/ApplyDeadline";
 import { CtaButton } from "@/components/CtaButton";
 import { FaqAccordion } from "@/components/FaqAccordion";
 import { FormQrPanel } from "@/components/FormQrPanel";
@@ -25,9 +26,9 @@ function toPersonCards(people: Person[]): PersonCard[] {
 }
 
 const HERO_HIGHLIGHTS = [
-  { label: "参加費", value: "無料" },
-  { label: "定員", value: "20名" },
-  { label: "開催", value: "オンライン夜19:00〜" },
+  { label: "参加費", value: "無料", note: undefined },
+  { label: "定員", value: "20名", note: "（申込多数の場合は抽選）" },
+  { label: "開催", value: "オンライン夜19:00〜", note: undefined },
 ];
 
 export default function Home() {
@@ -88,10 +89,11 @@ export default function Home() {
             専任メンターがおよそ3ヶ月間、あなたの隣で伴走します。
           </p>
 
-          <div className="mt-8">
+          <div className="mt-8 flex flex-col items-start gap-3 sm:flex-row sm:items-center">
             <CtaButton href={links.apply} size="lg" className="w-full sm:w-auto">
               無料で受講申し込み
             </CtaButton>
+            <ApplyDeadline />
           </div>
 
           <dl className="mt-10 grid max-w-2xl grid-cols-1 gap-3 sm:grid-cols-3">
@@ -103,13 +105,23 @@ export default function Home() {
                 <dt className="text-xs font-bold tracking-wider text-primary">
                   {item.label}
                 </dt>
-                <dd className="mt-1 text-lg font-bold text-ink">{item.value}</dd>
+                <dd className="mt-1 text-lg font-bold text-ink">
+                  {item.value}
+                  {item.note && (
+                    <span className="block text-xs font-bold text-ink-muted">
+                      {item.note}
+                    </span>
+                  )}
+                </dd>
               </div>
             ))}
           </dl>
 
           <p className="mt-6 text-sm text-ink-muted">
             参加要件：{overview.target}
+            <br />
+            申込締切：
+            <span className="font-bold text-ink">{overview.deadline}</span>
           </p>
           </div>
 
@@ -358,8 +370,8 @@ export default function Home() {
             </h3>
             <p className="mt-4 leading-relaxed text-ink-muted">
               01〜05はオンライン開催（19:00〜21:30）。パソコンとネット環境があれば、
-              お住まいの場所を問わず参加できます。06のみリアル開催（ときわプラザ
-              13:30〜15:30）です。
+              お住まいの場所を問わず参加できます。06のみリアル開催（
+              {overview.venue} 13:30〜15:30）です。
             </p>
             <div className="mt-6">
               <CtaButton href="/program" variant="secondary">
@@ -409,7 +421,8 @@ export default function Home() {
                 まずは説明会だけでも
               </a>
             </div>
-            <p className="mt-5 text-sm text-primary-pale">
+            <ApplyDeadline variant="onDark" className="mt-5" />
+            <p className="mt-3 text-sm text-primary-pale">
               事前説明会：{overview.briefing}
               <br />
               講座内容の説明とご質問タイム。初心者でも大丈夫です。
@@ -454,6 +467,8 @@ export default function Home() {
               term: "日程",
               detail: `2026年9月23日(水)〜12月5日(土) ${overview.time}`,
             },
+            { term: "会場（第6回）", detail: overview.venue },
+            { term: "申込締切", detail: overview.deadline, emphasis: true },
             { term: "事前説明会", detail: overview.briefing },
             { term: "修了証", detail: overview.certificate },
             { term: "全日程の終了", detail: overview.completion },
@@ -468,10 +483,25 @@ export default function Home() {
               className="grid gap-1 p-5 sm:grid-cols-[10rem_1fr] sm:gap-4"
             >
               <dt className="font-bold text-primary-dark">{row.term}</dt>
-              <dd className="text-ink-muted">{row.detail}</dd>
+              <dd
+                className={
+                  row.emphasis ? "font-bold text-ink" : "text-ink-muted"
+                }
+              >
+                {row.detail}
+              </dd>
             </div>
           ))}
         </dl>
+
+        <div className="mx-auto mt-6 max-w-3xl rounded-card border border-accent bg-accent/15 px-6 py-5">
+          <p className="text-sm font-bold text-accent-strong">
+            抽選について
+          </p>
+          <p className="mt-2 leading-relaxed text-ink">
+            {overview.lotteryNote}
+          </p>
+        </div>
 
         <p className="mx-auto mt-8 max-w-3xl text-sm leading-relaxed text-ink-muted">
           {site.disclaimer}
@@ -479,10 +509,11 @@ export default function Home() {
 
         <FormQrPanel className="mx-auto mt-12 max-w-3xl" />
 
-        <div className="mt-8 text-center">
+        <div className="mt-8 flex flex-col items-center gap-3">
           <CtaButton href={links.apply} size="lg">
             無料で受講申し込み
           </CtaButton>
+          <ApplyDeadline />
         </div>
       </section>
     </>

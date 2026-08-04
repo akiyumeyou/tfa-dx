@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
+import { ApplyDeadline } from "@/components/ApplyDeadline";
 import { CtaButton } from "@/components/CtaButton";
 import { FormQrPanel } from "@/components/FormQrPanel";
 import { SectionHeading } from "@/components/SectionHeading";
@@ -54,10 +55,11 @@ export default function ProgramPage() {
             AIを味方にする方法を学ぶ全6回。マインドセットから実践、そして発表まで、
             およそ3ヶ月で「自分で進める力」が身につくよう設計されています。
           </p>
-          <div className="mt-8">
+          <div className="mt-8 flex flex-col items-start gap-3 sm:flex-row sm:items-center">
             <CtaButton href={links.apply} size="lg">
               無料で受講申し込み
             </CtaButton>
+            <ApplyDeadline />
           </div>
         </div>
       </section>
@@ -257,7 +259,7 @@ export default function ProgramPage() {
 
                     {session.venue === "リアル開催" && (
                       <p className="mt-4 text-sm font-semibold text-primary-dark">
-                        会場：ときわプラザ（アスティ2F）第5会議室
+                        会場：{overview.venue}
                       </p>
                     )}
                   </div>
@@ -317,6 +319,8 @@ export default function ProgramPage() {
             { term: "参加費", detail: overview.fee },
             { term: "定員", detail: overview.capacity },
             { term: "対象", detail: overview.target },
+            { term: "申込締切", detail: overview.deadline, emphasis: true },
+            { term: "会場（第6回）", detail: overview.venue },
             { term: "修了証", detail: overview.certificate },
             { term: "全日程の終了", detail: overview.completion },
             { term: "事前説明会", detail: overview.briefing },
@@ -327,10 +331,21 @@ export default function ProgramPage() {
               className="grid gap-1 p-5 sm:grid-cols-[10rem_1fr] sm:gap-4"
             >
               <dt className="font-bold text-primary-dark">{row.term}</dt>
-              <dd className="text-ink-muted">{row.detail}</dd>
+              <dd
+                className={
+                  row.emphasis ? "font-bold text-ink" : "text-ink-muted"
+                }
+              >
+                {row.detail}
+              </dd>
             </div>
           ))}
         </dl>
+
+        <div className="mt-6 max-w-3xl rounded-card border border-accent bg-accent/15 px-6 py-5">
+          <p className="text-sm font-bold text-accent-strong">抽選について</p>
+          <p className="mt-2 leading-relaxed text-ink">{overview.lotteryNote}</p>
+        </div>
 
         <p className="mt-8 max-w-3xl text-sm leading-relaxed text-ink-muted">
           {site.disclaimer}
@@ -346,6 +361,7 @@ export default function ProgramPage() {
             講師・メンターを見る
           </CtaButton>
         </div>
+        <ApplyDeadline className="mt-4" />
       </section>
     </>
   );

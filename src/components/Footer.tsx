@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { links, site } from "@/data/site";
+import { ApplyDeadline } from "./ApplyDeadline";
 import { CtaButton } from "./CtaButton";
 
 export function Footer() {
@@ -26,6 +27,7 @@ export function Footer() {
               まずは説明会（9/2）だけでも
             </a>
           </div>
+          <ApplyDeadline variant="onDark" className="mt-5" />
         </div>
 
         <p className="mt-10 text-sm leading-relaxed text-primary-light">
@@ -54,8 +56,6 @@ export function Footer() {
             <p className="mt-2">
               <span className="font-bold">{site.name}：</span>
               徳島県立男女共同参画総合支援センター
-              <br />
-              「フレアキャンパス講座」
             </p>
             <p className="mt-2">
               <span className="font-bold">受託者：</span>

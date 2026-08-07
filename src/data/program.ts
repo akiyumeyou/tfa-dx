@@ -253,7 +253,7 @@ export const audienceTypes = [
   },
   {
     icon: "/images/audience/audience-3.webp",
-    title: "強くなりたい",
+    title: "自信をつけたい",
     description:
       "自分の力で選択肢を広げたい。その気持ちが一番の参加資格です。",
   },

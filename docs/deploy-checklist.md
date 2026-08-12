@@ -102,9 +102,65 @@ X・Facebook・LINEは、一度読み込んだ画像やタイトルを**自社�
 
 ---
 
+## 2-4. Google検索に載せる（あと1ステップ）
+
+サイト側の準備は **2026-08-12に完了しています**。以下はもう動いています。
+
+| 用意したもの | 確認用URL |
+| --- | --- |
+| サイトマップ（Googleに全ページを伝える） | https://tfa-dx.vercel.app/sitemap.xml |
+| robots.txt（クロールを許可する） | https://tfa-dx.vercel.app/robots.txt |
+| 構造化データ（講座・FAQの内容をGoogleに伝える） | 各ページのHTMLに埋め込み済み |
+| canonical URL（重複ページ扱いを防ぐ） | 3ページとも設定済み |
+
+残っているのは **Google Search Console への登録** だけです。これはGoogleアカウントでの
+ログインが必要なので、以下を手で行ってください。
+
+### 手順
+
+1. https://search.google.com/search-console にGoogleアカウントでログイン
+2. 「プロパティを追加」→ **URLプレフィックス** を選び、`https://tfa-dx.vercel.app` を入力
+3. 所有権の確認画面で **「HTMLタグ」** を選ぶと、こんなコードが表示されます
+
+   ```html
+   <meta name="google-site-verification" content="abcdefg123456..." />
+   ```
+
+   この `content="..."` の中身（`abcdefg123456...` の部分）をコピーします。
+
+4. Vercelの管理画面 → プロジェクト `tfa-dx` → Settings → Environment Variables で登録
+
+   | 項目 | 入力する値 |
+   | --- | --- |
+   | Key | `NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION` |
+   | Value | 手順3でコピーした文字列 |
+   | Environment | Production にチェック |
+
+5. 保存したら Deployments タブ →最新のデプロイの「…」→ **Redeploy**（環境変数は再デプロイしないと反映されません）
+6. Search Consoleの画面に戻って「確認」を押す
+
+   ※ Claude Codeに「確認コードは〇〇です」と伝えてもらえれば、手順4〜5を代わりに実行します。
+
+7. 確認が通ったら、左メニューの **「サイトマップ」** に `sitemap.xml` と入力して送信
+
+### 検索に出るまでの目安
+
+登録してから **数日〜2週間** ほどかかります。すぐには出ません。
+急ぎたい場合は Search Console の上部の検索窓にURLを貼って
+「インデックス登録をリクエスト」を押すと早まることがあります。
+
+「とくしまフューチャーアカデミー」のような固有名詞は比較的早く、
+「徳島 DX 女性 無料」のような一般的な言葉で上位に出るには時間がかかります。
+
+### 構造化データが正しいか確かめる（任意）
+
+https://search.google.com/test/rich-results にURLを入れると、
+Googleが講座情報（Course）とFAQを認識できているかを確認できます。
+
+---
+
 ## 3. 余裕があればやること（任意）
 
-- [ ] **Google Search Console** に登録する（検索結果への表示状況を確認できる）
 - [ ] **アクセス解析** を入れる（現在は未設定。何人が見て、どこで離脱したかを知りたい場合）
 - [ ] **独自ドメイン** をVercelに設定する（`tfa-dx.jp` のような分かりやすいURLにしたい場合）
 - [ ] 淵上さんの写真を、もう少し大きい・寄りの写真に差し替える（現在の元画像は600×400と小さめです）

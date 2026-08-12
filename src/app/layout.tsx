@@ -3,7 +3,9 @@ import { Noto_Sans_JP } from "next/font/google";
 import "./globals.css";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
+import { JsonLd } from "@/components/JsonLd";
 import { site } from "@/data/site";
+import { organizationJsonLd, websiteJsonLd } from "@/lib/structured-data";
 
 const notoSansJP = Noto_Sans_JP({
   variable: "--font-noto-sans-jp",
@@ -52,7 +54,21 @@ export const metadata: Metadata = {
     title: `${site.name} | ${site.tagline}`,
     description: site.description,
   },
-  robots: { index: true, follow: true },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+      "max-video-preview": -1,
+    },
+  },
+  /* Search Console の所有権確認コード。Vercelの環境変数に入れると出力される */
+  verification: {
+    google: process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION,
+  },
 };
 
 export default function RootLayout({
@@ -63,6 +79,8 @@ export default function RootLayout({
   return (
     <html lang="ja" className={`${notoSansJP.variable} h-full antialiased`}>
       <body className="flex min-h-full flex-col">
+        <JsonLd data={organizationJsonLd} />
+        <JsonLd data={websiteJsonLd} />
         <a
           href="#main"
           className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-[100] focus:rounded-card focus:bg-primary-dark focus:px-4 focus:py-3 focus:text-white"

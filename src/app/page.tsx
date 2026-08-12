@@ -1,15 +1,18 @@
+import type { Metadata } from "next";
 import Image from "next/image";
 import { ApplyDeadline } from "@/components/ApplyDeadline";
 import { CtaButton } from "@/components/CtaButton";
 import { FaqAccordion } from "@/components/FaqAccordion";
 import { FormQrPanel } from "@/components/FormQrPanel";
 import { HeroAside } from "@/components/HeroAside";
+import { JsonLd } from "@/components/JsonLd";
 import { PeopleMarquee, type PersonCard } from "@/components/PeopleMarquee";
 import { SectionHeading } from "@/components/SectionHeading";
 import { instructors, mentors, type Person } from "@/data/people";
 import { audienceTypes, features, sessions } from "@/data/program";
 import { challenge, links, overview, site } from "@/data/site";
 import { resolvePhoto } from "@/lib/photo";
+import { courseJsonLd, faqJsonLd } from "@/lib/structured-data";
 
 /** 写真パスの解決は fs を使うのでサーバー側で済ませてから渡す */
 function toPersonCards(people: Person[]): PersonCard[] {
@@ -31,9 +34,16 @@ const HERO_HIGHLIGHTS = [
   { label: "開催", value: "オンライン夜19:00〜", note: undefined },
 ];
 
+export const metadata: Metadata = {
+  alternates: { canonical: "/" },
+};
+
 export default function Home() {
   return (
     <>
+      <JsonLd data={courseJsonLd} />
+      <JsonLd data={faqJsonLd} />
+
       {/* アイキャッチ（全幅の帯＋見出し） */}
       <section className="relative">
         <Image

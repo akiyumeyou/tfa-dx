@@ -10,6 +10,7 @@ export const metadata: Metadata = {
   title: "講師・メンター",
   description:
     "とくしまフューチャーアカデミーDXの講師5名とメンター4名をご紹介します。最前線のDX・AI実践者と、身近に相談できる地元メンターによる伴走支援体制です。",
+  alternates: { canonical: "/instructors" },
 };
 
 function TokushimaBadge() {

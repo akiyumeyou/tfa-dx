@@ -21,6 +21,7 @@ export const metadata: Metadata = {
   title: "プログラム詳細",
   description:
     "全6回のカリキュラム詳細。第1部の講座（隔週水曜19:00〜21:00・オンライン）と第2部のAI学習・交流（21:00〜21:30）の2部制で進みます。およそ3ヶ月後・2月末のアンケート回答をもって全日程終了です。",
+  alternates: { canonical: "/program" },
 };
 
 /** 肩書は people.ts を正とし、講師データの重複を持たない */

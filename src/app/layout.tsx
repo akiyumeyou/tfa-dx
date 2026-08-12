@@ -18,25 +18,31 @@ const notoSansJP = Noto_Sans_JP({
 
 export const metadata: Metadata = {
   metadataBase: new URL(site.url),
+  /* 同名事業が毎年あるため、略称と年度をタイトルに入れて2026年度版だと判別できるようにする */
   title: {
-    default: `${site.name} | ${site.tagline}`,
-    template: `%s | ${site.name}`,
+    default: `${site.name}（${site.shortName}）${site.edition} | ${site.tagline}`,
+    template: `%s | ${site.name}（${site.shortName}）${site.edition}`,
   },
   description: site.description,
   keywords: [
+    "TFADX",
+    "TFADX 2026",
+    "TFA-DX",
+    "とくしまフューチャーアカデミーDX",
+    "とくしまフューチャーアカデミー",
     "徳島県",
+    "令和8年度",
     "DX人材育成",
     "女性",
     "AI",
     "リスキリング",
     "無料",
-    "とくしまフューチャーアカデミー",
   ],
   openGraph: {
     type: "website",
     locale: "ja_JP",
     siteName: site.name,
-    title: `${site.name} | ${site.tagline}`,
+    title: `${site.name}（${site.shortName}）${site.edition} | ${site.tagline}`,
     description: site.description,
     url: site.url,
     images: [
@@ -51,7 +57,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: `${site.name} | ${site.tagline}`,
+    title: `${site.name}（${site.shortName}）${site.edition} | ${site.tagline}`,
     description: site.description,
   },
   robots: {

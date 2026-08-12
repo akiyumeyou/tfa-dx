@@ -65,8 +65,9 @@ export default function Home() {
         <div className="absolute inset-0 flex items-center">
           <div className="mx-auto w-full max-w-[1200px] px-4 md:px-8">
             <h1 className="relative w-[88%] max-w-[620px] sm:w-[76%]">
+              {/* 画像の見出しに相当するテキスト。事業名と年度も含めて何のページか分かるようにする */}
               <span className="sr-only">
-                AIを味方につけ、徳島で輝くDX人材へ
+                {site.name}（{site.shortName}）{site.edition} ─ {site.tagline}
               </span>
               <Image
                 src="/images/hero-title.webp"
@@ -90,7 +91,7 @@ export default function Home() {
         <div className="mx-auto grid max-w-[1200px] gap-10 px-4 py-14 md:px-8 md:py-24 lg:grid-cols-[1.35fr_1fr] lg:items-center">
           <div>
           <p className="inline-block rounded-full bg-primary px-4 py-1.5 text-sm font-bold text-white">
-            徳島県 女性DX人材育成プログラム
+            {site.edition} 徳島県 女性DX人材育成プログラム
           </p>
           {/* 見出しはページ最上部のアイキャッチ側に置いているため、ここでは繰り返さない */}
           <p className="mt-6 max-w-2xl text-lg leading-relaxed text-ink md:text-xl">

@@ -1,11 +1,20 @@
 export const site = {
   name: "とくしまフューチャーアカデミーDX",
-  shortName: "TFA-DX",
+  /** 略称。連絡先メール tfadx2026@gmail.com に合わせてハイフンなしを正とする */
+  shortName: "TFADX",
+  /**
+   * 検索での別名。過去年度サイトが「TFA-DX」表記で先にインデックスされているため、
+   * 表記ゆれをまとめて構造化データに渡す。
+   */
+  aliases: ["TFADX", "TFA-DX", "TFA DX", "Tokushima Future Academy DX"],
+  /** 年度。同名事業が毎年開催されるので、2026年度版であることを明示する */
+  edition: "2026年度",
+  editionJp: "令和8年度",
   tagline: "AIを味方につけ、徳島で輝くDX人材へ",
   subCopy:
     "初心者でも大丈夫。AIに思いを伝えられる言葉があれば十分です。",
   description:
-    "徳島県主催の女性向けDX人材育成プログラム。参加費無料・全6回オンライン夜開催・専任メンターがおよそ3ヶ月間伴走します。徳島県にお住まいの女性ならどなたでも（年齢制限なし）。",
+    "2026年度（令和8年度）TFADX。徳島県主催の女性向けDX人材育成プログラム「とくしまフューチャーアカデミーDX」の公式サイトです。参加費無料・全6回オンライン夜開催・専任メンターがおよそ3ヶ月間伴走します。徳島県にお住まいの女性ならどなたでも（年齢制限なし）。",
   url: "https://tfa-dx.vercel.app",
   contactEmail: "tfadx2026@gmail.com",
   organizer: "徳島県",

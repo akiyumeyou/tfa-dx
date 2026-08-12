@@ -17,7 +17,7 @@ export const organizationJsonLd = {
   "@context": "https://schema.org",
   "@type": "EducationalOrganization",
   name: site.name,
-  alternateName: site.shortName,
+  alternateName: [...site.aliases, `${site.shortName} ${site.edition}`],
   url: site.url,
   logo: `${site.url}/icon.png`,
   image: `${site.url}/images/og/ogp.jpg`,
@@ -34,7 +34,7 @@ export const websiteJsonLd = {
   "@context": "https://schema.org",
   "@type": "WebSite",
   name: site.name,
-  alternateName: site.shortName,
+  alternateName: [...site.aliases, `${site.shortName} ${site.edition}`],
   url: site.url,
   inLanguage: "ja",
   publisher: { "@type": "Organization", name: site.contractor },
@@ -43,7 +43,8 @@ export const websiteJsonLd = {
 export const courseJsonLd = {
   "@context": "https://schema.org",
   "@type": "Course",
-  name: `${site.name}（女性向けDX人材育成プログラム）`,
+  name: `${site.name}（${site.shortName}）${site.edition}`,
+  alternateName: [...site.aliases, `${site.shortName} 2026`],
   description: site.description,
   url: site.url,
   inLanguage: "ja",
@@ -68,7 +69,7 @@ export const courseJsonLd = {
   hasCourseInstance: [
     {
       "@type": "CourseInstance",
-      name: `${site.name} 2026年度`,
+      name: `${site.shortName} ${site.edition}（${site.editionJp}）`,
       /* 第6回のみ会場開催のため online ではなく blended */
       courseMode: "Blended",
       inLanguage: "ja",

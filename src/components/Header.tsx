@@ -19,7 +19,7 @@ export function Header() {
         >
           {/* 英字は幅を取るのでスマホでは省く（縦2行になってヘッダーが厚くなるため） */}
           <span className="hidden text-[10px] font-semibold tracking-[0.18em] text-primary sm:block md:text-xs">
-            TOKUSHIMA FUTURE ACADEMY・DX COURSE
+            TFADX・TOKUSHIMA FUTURE ACADEMY DX・{site.edition}
           </span>
           <span className="text-sm font-bold sm:text-base md:text-lg">
             {site.name}

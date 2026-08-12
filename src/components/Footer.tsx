@@ -50,6 +50,12 @@ export function Footer() {
 
           <div className="text-sm leading-relaxed">
             <p>
+              <span className="font-bold">事業名：</span>
+              {site.editionJp}（{site.edition}）{site.name}
+              <br />
+              略称 {site.shortName}（{site.aliases[1]}）
+            </p>
+            <p className="mt-2">
               <span className="font-bold">主催：</span>
               {site.organizer}
             </p>
